@@ -1,0 +1,89 @@
+{
+  "type": "Settings",
+  "audio": {
+    "input": {
+      "encoding": "mulaw",
+      "sample_rate": 8000
+    },
+    "output": {
+      "encoding": "mulaw",
+      "sample_rate": 8000,
+      "container": "none"
+    }
+  },
+  "agent": {
+    "language": "en",
+    "listen": {
+      "provider": {
+        "type": "deepgram",
+        "model": "nova-3"
+      }
+    },
+    "think": {
+      "provider": {
+        "type": "open_ai",
+        "model": "gpt-4o-mini",
+        "temperature": 0.7
+      },
+      "prompt": "You are a telecom customer care assistant.\n\nIMPORTANT OUTPUT RULES:\n- Do NOT use markdown\n- Do NOT use bullet points\n- Do NOT use symbols like *, -, #\n- Speak in natural sentences only\n- Keep responses short and conversational\n- If listing items, say them as sentences\n- Example: \"The Daily 1GB plan costs 1.50 dollars and gives you 1GB for one day.\"\n\nYou help users with:\n- Internet plans\n- Activating packages\n- Checking subscriptions",
+      "functions": [
+  {
+    "name": "get_plan_info",
+    "description": "Get details about an internet data plan",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "plan_name": {
+          "type": "string",
+          "description": "Name of the internet plan (e.g. daily_1gb, weekly_5gb, monthly_20gb)"
+        }
+      },
+      "required": ["plan_name"]
+    }
+  },
+  {
+    "name": "subscribe_plan",
+    "description": "Activate an internet plan for a customer",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "customer_name": {
+          "type": "string",
+          "description": "Full name of the customer"
+        },
+        "plan_name": {
+          "type": "string",
+          "description": "Plan name like monthly_20gb"
+        }
+      },
+      "required": ["customer_name", "plan_name"]
+    }
+  },
+  {
+    "name": "check_subscription",
+    "description": "Check subscription status using subscription ID",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subscription_id": {
+          "type": "integer",
+          "description": "Subscription ID number"
+        }
+      },
+      "required": ["subscription_id"]
+    }
+  }
+]
+    },
+    "speak": {
+      "provider": {
+        "type": "deepgram",
+        "model": "aura-2-thalia-en"
+      }
+    },
+    "greeting": "Hello! I'm your telecom customer care assistant. I can help you with internet plans, activating packages, and checking your subscription. How can I assist you today?"
+  }
+}
